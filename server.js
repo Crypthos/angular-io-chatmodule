@@ -1,18 +1,49 @@
-let app = require('express')();
-let http = require('http').createServer(app);
-let io = require('socket.io').listen(http);
+const path = require('path');
+const http = require('http');
+const express = require('express');
 
-app.get('/', (req, res) => res.send('I can respond, im a node server!'));
+const app = express();
+const server = http.createServer(app);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+  }
+}); // allows Cross-Origin Resource Sharing(CORS)
 
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/', (req, res) => res.send('Welcome to the memory chat!'));
+
+/**
+ * socket.io connection and event handling
+ */
 io.on('connection', (socket) => {
-  console.log('a user connected');
+//  Show welcome message
+  socket.emit('message', 'Welcome to MemoryChat');
+
+  // Checks user disconnections
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+  // Broadcast/send a message to the server
   socket.on('message', (msg) => {
     console.log(msg);
     socket.broadcast.emit('message-broadcast', msg);
   });
+
+//  Broadcast user disconnections to all users
+  socket.on('disconnect', () => {
+    io.emit('message', 'A user has left the chat')
+  });
+
+
 });
 
-http.listen(3000, () =>  {
-  console.log('listening on *:3000');
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`)
 });
+
 

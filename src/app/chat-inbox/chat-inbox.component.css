@@ -1,27 +1,31 @@
-.chat-messages-show-container{
-  background: #ee4d4d;
+.chat-messages-show-container {
+  background: #54c3f1;
   height: 400px;
   display: flex;
   flex-direction: column;
   overflow: auto;
 }
+
 .chat-messages-show-list {
-  list-style-type:none;
+  list-style-type: none;
   margin: 0;
   padding: 0;
 }
-.chat-messages-create-container{
+
+.chat-messages-create-container {
   background: #616161;
   height: 100px;
   display: flex;
   justify-content: center;
 }
+
 .chat-messages-create-input {
   padding: 12px;
   margin: 29px 30px;
-  flex:2
+  flex: 2
 }
-.chat-messages-create-button {
+
+.send-chat-messages {
   height: 50px;
   margin: auto 40px;
   width: 100px;
